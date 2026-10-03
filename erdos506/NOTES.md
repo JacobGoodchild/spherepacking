@@ -29,7 +29,7 @@ These reproduce the forum's values: 8 circles (n=6), 11 (n=7), 17 (n=8), and 18 
    - all 9-subsets of a 5×5 and 6×6 integer grid: best with largest block ≤ 5 is 32;
      triangular lattice: 29;
    - all 9-subsets of 26 cube/octahedron/cuboctahedron directions on the sphere: 25 (only the
-     known 8-on-a-circle type); with largest block ≤ 5: 27;
+     known 8-on-a-circle type);
    - simulated annealing over 74 icosahedral + cubic directions: same, 25 / 27 *(provisional: run
      before a tolerance fix; being re-run)*;
    - ring families (points in layers of regular polygons on the sphere): ≥ 31 with block ≤ 5
@@ -50,3 +50,30 @@ lines). So it can only exist if incidence theorems (Miquel-type) make many of th
 automatic — random designs are hopeless; structured ones are the only hope.
 
 Status: **open**. Evidence leans towards m(9) = 25, but nothing here is a proof.
+
+## Towards a proof that m(9) = 25 (in progress)
+
+Model: put the 9 points on a sphere (inverse stereographic projection). Every triple spans one
+plane ("block"); blocks through the projection pole are the straight lines. #circles = B − L.
+`lower9*.py` asks CP-SAT for an abstract block structure with B − L ≤ 24 satisfying necessary
+conditions coming from classical theorems:
+
+- lines through the pole pairwise share ≤ 1 point;
+- **Csima–Sawyer** (≥ 6n/13 ordinary lines), **Melchior** (t2 ≥ 3 + Σ(k−3)t_k) and
+  **de Bruijn–Erdős** (≥ n lines), applied at the pole (n = 9) and, after inverting, at every
+  point (n = 8);
+- no **Fano plane** and no **Möbius–Kantor 8₃** configuration among real lines (neither is
+  realizable over ℝ), at the pole and at every point;
+- **Pappus closure** for the real lines (8 of the 9 Pappus lines force the 9th);
+- **Miquel closure** (5 concyclic faces of a "cube" force the 6th).
+
+Results so far:
+- **Some block with ≥ 6 points: INFEASIBLE** (`lower9big.py`, blocks up to 8 points, only
+  the Csima–Sawyer / Melchior / de Bruijn–Erdős conditions). This independently confirms the
+  forum's proposition: such configurations have ≥ 25 circles.
+- Blocks ≤ 5 points with the full rule set (`lower9d.py`): running.
+
+If the remaining case also comes back INFEASIBLE, that is a computer-assisted proof that
+m(9) = 25, resting on: the cited theorems (and their non-degeneracy conditions, which should be
+double-checked), and the correctness of the encoding and solver. It would need independent
+verification (e.g. a second solver or a proof certificate) before being announced.
