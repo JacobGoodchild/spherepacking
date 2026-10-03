@@ -74,3 +74,30 @@ if __name__=="__main__":
         P=seeds[name]; print(name,"start circles",count(P)[0],flush=True)
         res=beam(P,9)
         print(name,"=> best n=9:",res[0][0],res[0][1],flush=True)
+
+
+def mobius_score(P):
+    """Fewest circles over all inversions: B - max #blocks through a centre O (O not a point).
+    O at infinity = keep as is (blocks through infinity are the lines)."""
+    B=blocks(P); objs=[(b[0],b[1]) for b in B.values()]
+    nlines=sum(1 for b in B.values() if b[0]=='L')
+    best=nlines; bestO=None
+    cands={}
+    for o1,o2 in itertools.combinations(objs,2):
+        for q in inter(o1,o2):
+            if min(np.hypot(q[0]-x,q[1]-y) for x,y in P)<1e-6: continue
+            cands[(round(q[0],5),round(q[1],5))]=q
+    sets=[b[2] for b in B.values()]
+    for q in cands.values():
+        if abs(q[0])+abs(q[1])>1e3: continue
+        thr=[]
+        for bi,(t,p) in enumerate(objs):
+            if t=='L': on= abs(p[0]*q[0]+p[1]*q[1]+p[2])<1e-7
+            else: on= abs(np.hypot(q[0]-p[0],q[1]-p[1])-p[2])<1e-7*max(1,p[2])
+            if on: thr.append(bi)
+        k=len(thr)
+        if k<=best: continue
+        # sanity: blocks through one centre pairwise share <= 1 point
+        if any(len(sets[a]&sets[b])>1 for a,b in itertools.combinations(thr,2)): continue
+        best=k; bestO=q
+    return len(B)-best, len(B), best, max(len(b[2]) for b in B.values()), bestO
