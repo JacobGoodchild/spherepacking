@@ -1,0 +1,2 @@
+# start 2026-10-03T11:03:37+00:00 N=73 D=6 workers=4 end=2026-10-03T14:00:00+00:00
+# timestamp_utc, iterations, best_max_dot, violation(best_max_dot-0.5)
