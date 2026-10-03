@@ -71,7 +71,18 @@ Results so far:
 - **Some block with ≥ 6 points: INFEASIBLE** (`lower9big.py`, blocks up to 8 points, only
   the Csima–Sawyer / Melchior / de Bruijn–Erdős conditions). This independently confirms the
   forum's proposition: such configurations have ≥ 25 circles.
-- Blocks ≤ 5 points with the full rule set (`lower9d.py`): running.
+- Blocks ≤ 5 points with the full rule set: **undecided**. `lower9d.py` (30 min, 3 cores) and
+  `lower9e.py` (adds symmetry breaking and splits by the number of lines L into 0–5, 6–7, 8–9,
+  10–12; 6800 s each on one core) all ended UNKNOWN. A lazy "guess-and-check" variant
+  (`cegar.py`) is included but was not run to completion.
+
+### Suggested next steps
+1. Run the `lower9e.py` cases much longer (hours to days), or re-encode for a SAT solver
+   (CaDiCaL/Kissat via PySAT) with stronger symmetry breaking (lex-leader on the block incidence).
+2. If a case returns a design instead, try to realise it numerically (`realize.py`) — a realisable
+   design would give a new upper bound m(9) ≤ 24.
+3. If all cases return INFEASIBLE: re-check every geometric rule and its non-degeneracy conditions,
+   and confirm with an independent solver / proof certificate (DRAT) before posting.
 
 If the remaining case also comes back INFEASIBLE, that is a computer-assisted proof that
 m(9) = 25, resting on: the cited theorems (and their non-degeneracy conditions, which should be
